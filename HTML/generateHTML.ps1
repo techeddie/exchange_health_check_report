@@ -92,7 +92,7 @@ TD{border-width: 1px;padding: 5px;border-style: solid;border-color: black}
 	$day = (get-date).Day
 	$today = (Get-Date).AddDays(-7)
         
-	$a = updatehistory  | ConvertTo-HTML -PreContent "<h3>Last installed Windows Updates:</h3>"
+	$a = updatehistory  | select HotFixID,Date,Title | ConvertTo-HTML -PreContent "<h3>Last installed Windows Updates:</h3>"
 
 	$b = Get-MailboxDatabase -Status | 	select Name, DatabaseSize, AvailableNewMailboxspace, Server, EdbFilePath, LastFullBackup | ConvertTo-HTML -PreContent "<h3>MailboxDatabase Status:</h3>"  
 
@@ -138,8 +138,7 @@ TD{border-width: 1px;padding: 5px;border-style: solid;border-color: black}
 	$j = Get-ServerHealth -Identity $servername | ? { $_.AlertValue -eq "Unhealthy" } |	select Server, State, Name, TargetResource, HealthSetName, AlertValue, ServerComponent | 
 	ConvertTo-HTML -PreContent "<h3>Get-ServerHealth :</h3>" 
 	
-	$k = Test-MAPIConnectivity -MAPIConnectivity -Server $servername  | select MailboxServer, Database,Result,Error | 
-	ConvertTo-HTML -PreContent "<h3>Test-MAPIConnectivity:</h3>"
+	$p = Test-MAPIConnectivity -Server $servername  | select MailboxServer, Database,Result,Error  | ConvertTo-HTML -PreContent "<h3>Test-MAPIConnectivity:</h3>"
 
 	
 		ConvertTo-HTML -body "
@@ -159,7 +158,8 @@ TD{border-width: 1px;padding: 5px;border-style: solid;border-color: black}
 		$b $line
 		$n $line
 		$o $line
-		$j $line		
+		$j $line
+		$p $line		
 		"  -Head $Style | Add-Content "$htmlfile"				
 	
     $rootfolder  = (Get-Item -Path "..\").FullName
