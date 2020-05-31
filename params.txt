@@ -1,0 +1,4 @@
+smtpserver:smtp.contoso.com
+sender:exreport@contoso.com
+port:25
+recipients:user.1@contoso.com,user.2@contoso.com
